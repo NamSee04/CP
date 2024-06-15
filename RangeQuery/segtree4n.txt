@@ -1,0 +1,69 @@
+struct Node {
+    int val, pf, sf, len;
+    Node(int _val, int _pf, int _sf, int _len) : val(_val), pf(_pf), sf(_sf), len(_len) {}
+};
+
+Node v0(0, 0, 0, 1);
+Node v1(1, 1, 1, 1);
+
+
+Node operator + (const Node &y, const Node &x) {
+    Node ans(0, 0, 0, 0);
+    ans.pf = y.pf + (y.pf == y.len ? x.pf : 0);
+    ans.sf = x.sf + (x.sf == x.len ? y.sf : 0);
+    ans.len = y.len + x.len;
+    ans.val = max({x.val, y.sf + x.pf, y.val});
+    return ans;
+}
+
+template <typename T> class SegmentTree {
+
+    private:
+        vector<T> tree;
+        const T dval;
+        int N;
+        function<T(const T &, const T &)> merge;
+        void build(int t, int tl, int tr) {
+            if (tl == tr) {
+                tree[t] = dval;
+                return;
+            }
+            build(t << 1, tl, (tl + tr) >> 1);
+            build(t << 1 | 1, ((tl + tr) >> 1) + 1, tr);
+            tree[t] = merge(tree[t << 1], tree[t << 1 | 1]);
+        }
+
+        void update(int i, T v, int t, int tl, int tr) {
+            if (tl == tr) {
+                tree[t] = v;
+                return;
+            }
+
+            if (i <= (tl + tr) >> 1) update(i, v, t << 1, tl, (tl + tr) >> 1);
+            else update(i, v, t << 1 | 1, ((tl + tr) >> 1) + 1, tr);
+            tree[t] = merge(tree[t << 1], tree[t << 1 | 1]);
+        }
+
+        T query(int l, int r, int t, int tl, int tr) {
+            if (r < tl || tr < l) return dval;
+            if (l <= tl && tr <= r) return tree[t];
+            return merge(
+                        query(l, r, t << 1, tl, (tl + tr) >> 1),
+                        query(l, r, t << 1 | 1, ((tl + tr) >> 1) + 1, tr)
+                        );
+        }
+
+
+    public:
+        SegmentTree(function<T(const T &, const T &)> merge, T dval, int sz)
+            : merge(merge), dval(dval), N(sz), tree(4 * sz, dval) 
+        {
+            build();
+        }
+        inline void build() { build(1, 0, N - 1); }
+        inline void update(int i, T v) { update(i, v, 1, 0, N - 1); }
+        inline T query(int l, int r) { return query(l, r, 1, 0, N - 1); }
+
+};
+
+SegmentTree<Node> st0([](const Node &a, const Node &b) {return a + b;}, v0, 100005);

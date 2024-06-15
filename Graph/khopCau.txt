@@ -1,0 +1,21 @@
+int time = 0;
+vector<int> st(n), low(n);
+vector<bool> vis(n);
+int cau = 0, khop = 0;
+function<void(int, int)> dfs =[&](int u, int p) {
+    st[u] = time++;
+    vis[u] = true;
+    low[u] = st[u];
+    int cnt = p != -1;
+    for (auto v : g[u]) {
+        if (v == p) continue;
+        if (vis[v]) ckmin(low[u], st[v]);
+        else {
+            dfs(v, u);
+            ckmin(low[u], low[v]);
+            if (low[v] == st[v]) cau++;
+            if (low[v] >= st[u]) cnt++;
+        }
+    }
+    khop += cnt > 1;
+};

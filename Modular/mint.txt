@@ -1,0 +1,24 @@
+const ll mod = 1e9 + 7;
+
+ll add(ll a, ll b) {
+    a += mod, b += mod;
+    a %= mod, b %= mod;
+    return (a + b + mod) % mod;
+}
+
+ll mul(ll a, ll b) {
+    a += mod, b += mod;
+    a %= mod, b %= mod;
+    return ((a * b) + mod) % mod;
+}
+
+ll p(ll x, ll n, ll m) {
+	x %= m;
+	ll res = 1;
+	while (n > 0) {
+		if (n & 1) { res = res * x % m; }
+		x = x * x % m;
+		n >>= 1;
+	}
+	return res;
+}

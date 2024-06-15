@@ -1,0 +1,43 @@
+
+{
+    int val = 0;
+    int lz = 0;
+};
+
+vector<node> a;
+
+void pushDown(int idx) {
+    a[idx * 2].lz += a[idx].lz;
+    a[idx * 2 + 1].lz += a[idx].lz;
+    a[idx * 2].val += a[idx].lz;
+    a[idx * 2 + 1].val += a[idx].lz;
+
+    a[idx].lz = 0;
+}
+
+void upd(int idx, int l, int r, int u, int v, int val) {
+    if (r < u || l > v) {
+        return;
+    }
+    if (l >= u && r <= v) {
+        a[idx].lz += val;
+        a[idx].val += val;
+        return;
+    }
+    pushDown(idx);
+    upd(idx * 2, l, (l + r) / 2, u, v, val);
+    upd(idx * 2 + 1, (l + r) / 2 + 1, r, u, v, val);
+    a[idx].val = max(a[idx * 2].val, a[idx * 2 + 1].val);
+}
+
+int get(int idx, int l, int r, int u, int v) {
+    if (r < u || l > v) {
+        return -1e9;
+    }
+    if (l >= u && r <= v) {
+        return a[idx].val;
+    }
+    pushDown(idx);
+    int mid = (l + r) / 2;
+    return max(get(2 * idx, l, mid, u, v), get(2 * idx + 1, mid + 1, r, u, v));
+}

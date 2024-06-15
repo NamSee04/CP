@@ -1,0 +1,32 @@
+template <class T> class SegTree {
+    private:
+        const T DEFAULT = 0;
+
+        vector<T> segtree;
+        int sz;
+    public:
+        SegTree(int len) : sz(len), segtree(2 * len, DEFAULT) {}
+
+        void set(int idx, T val) {
+            idx += sz;
+            segtree[idx] = val;
+            for (;idx > 1; idx >>= 1) {
+                segtree[idx >> 1] = segtree[idx] + segtree[idx ^ 1];
+            }
+        }
+
+        T get(int l, int r) { // [l, r)
+            T ans = DEFAULT;
+            for (l += sz, r += sz; l < r; l >>= 1, r >>= 1) {
+                if (l & 1)
+                    ans += segtree[l++];
+                if (r & 1)
+                    ans += segtree[--r];
+            }
+            return ans;
+        }
+
+        T operator [] (int idx) {
+            return segtree[idx + sz];
+        }
+};

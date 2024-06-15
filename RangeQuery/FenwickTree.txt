@@ -1,0 +1,27 @@
+template <class T> class BIT {
+  private:
+	int size;
+	vector<T> bit;
+
+  public:
+	BIT(int size) : size(size), bit(size + 1) {}
+
+
+	void add(int ind, int val) {
+		ind++;
+		for (; ind <= size; ind += ind & -ind) { bit[ind - 1] += val; }
+	}
+
+	T pref_sum(int ind) {
+		ind++;
+		T total = 0;
+		for (; ind > 0; ind -= ind & -ind) { total += bit[ind - 1]; }
+		return total;
+	}
+
+    T sumlr(int l, int r) {
+		if (l == 0)
+			return pref_sum(r);
+        return pref_sum(r) - pref_sum(l - 1);
+    }
+};
