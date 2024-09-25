@@ -1,0 +1,11 @@
+// value at 3rd index in sorted array.
+    cout << "The value at 3rd index ::"
+         << *p.find_by_order(3) << endl;
+ 
+    // index of number 6
+    cout << "The index of number 6::" << p.order_of_key(6)
+
+g++ -DDebug test.cpp -o test
+//
+sort(all(a));
+a.resize(unique(all(a)) - a.begin());

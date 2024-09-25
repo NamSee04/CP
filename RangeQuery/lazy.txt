@@ -1,4 +1,4 @@
-
+struct node
 {
     int val = 0;
     int lz = 0;

@@ -1,0 +1,29 @@
+class Arr {
+	public:
+		long long val;
+		int id;
+		std::array<long long, 10> a={0};
+
+		Arr(long long vl = 0, int ID = 0) {}
+
+		// Initialization function
+		void init(long long vl, int ID) {
+			val = vl;
+			id = ID;
+			for (int i = 1; i <= 9; i++) {
+				if (check(id, i))
+					a[i] = 2 * val;
+				else
+					a[i] = val;
+			}
+		}
+
+		// Operator+ to add two Arr objects
+		Arr operator+(const Arr& other) const {
+			Arr ans(0, 0);
+			for (int i = 1; i <= 9; i++) {
+				ans.a[i] = this->a[i] + other.a[i];
+			}
+			return ans;
+		}
+};
