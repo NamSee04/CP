@@ -9,3 +9,5 @@ g++ -DDebug test.cpp -o test
 //
 sort(all(a));
 a.resize(unique(all(a)) - a.begin());
+
+vector dp(n, vector(m, vector<int>(k)));

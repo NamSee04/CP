@@ -14,7 +14,7 @@ void __print(long double x) {cerr << x;}
 void __print(char x) {cerr << '\'' << x << '\'';}
 void __print(const char *x) {cerr << '\"' << x << '\"';}
 void __print(const string &x) {cerr << '\"' << x << '\"';}
-void __print(bool x) {cerr << (x ? "true" : "false");}
+void __print(bool x) {cerr << (x ? "1" : "0");}
 void __print(const vector<bool> &x) {int f = 0; cerr << '{'; for (size_t i = 0; i < x.size(); ++i) cerr << (f++ ? ", " : ""), __print(x[i]); cerr << "}";}
 
 
