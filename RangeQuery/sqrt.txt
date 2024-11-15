@@ -1,0 +1,7 @@
+struct Block {
+    int l, r, id;
+    bool operator < (const Block & other) const {
+        if((l / 320) != (other.l / 320)) return (l < other.l);
+        return (r < other.r);
+    }
+};
