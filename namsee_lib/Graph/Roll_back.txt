@@ -1,0 +1,91 @@
+class DSU {
+  private:
+	vector<ll> p, sz, sum;
+	// stores previous unites
+	vector<pair<ll &, ll>> history;
+
+  public:
+	DSU(int n) : p(n), sz(n, 1), sum(n, 0) { iota(p.begin(), p.end(), 0); }
+
+    void init(vector<ll> &a) {REP(i, a.size()) sum[i] = a[i];}
+
+	int get(int x) { return x == p[x] ? x : get(p[x]); }
+
+	void unite(int a, int b) {
+		a = get(a);
+		b = get(b);
+		if (a == b) { return; }
+		if (sz[a] < sz[b]) { swap(a, b); }
+
+		// save this unite operation
+		history.push_back({sz[a], sz[a]});
+		history.push_back({p[b], p[b]});
+        history.push_back({sum[a], sum[a]});
+
+		p[b] = a;
+		sz[a] += sz[b];
+        sum[a] += sum[b];
+	}
+
+    void add(int node, int val) {
+        node = get(node);
+        history.push_back({sum[node], sum[node]});
+    }
+
+	int snapshot() { return history.size(); }
+    ll get_sum(int node) {return sum[get(node)];}
+
+	void rollback(int until) {
+		while (snapshot() > until) {
+			history.back().first = history.back().second;
+			history.pop_back();
+		}
+	}
+};
+
+const int MAXN = 3e5;
+
+
+DSU dsu(MAXN);
+
+
+struct Query {
+
+	int t, u, v, x;
+
+};
+
+
+vector<Query> seg[MAXN * 4];
+
+
+void update(Query &q, int v, int query_l, int query_r, int seg_l, int seg_r) {
+	if (query_l > seg_r || query_r < seg_l) { return; }
+	if (query_l <= seg_l && query_r >= seg_r) {
+		seg[v].push_back(q);
+		return;
+	}
+	int m = (seg_l + seg_r) / 2;
+	update(q, v * 2, query_l, query_r, seg_l, m);
+	update(q, v * 2 + 1, query_l, query_r, m + 1, seg_r);
+}
+
+
+void dfs(int v, int l, int r, vector<ll> &ans) {
+	int snapshot = dsu.snapshot();
+	for (Query &q : seg[v]) {
+		if (q.t == 1) { dsu.unite(q.u, q.v); }
+		if (q.t == 2) { dsu.add(q.v, q.x); }
+	}
+
+	if (l == r) {
+		for (Query &q : seg[v]) {
+			if (q.t == 3) { ans[l] = dsu.get_sum(q.v); }
+		}
+	} else {
+		int m = (l + r) / 2;
+		dfs(2 * v, l, m, ans);
+		dfs(2 * v + 1, m + 1, r, ans);
+	}
+	dsu.rollback(snapshot);
+}

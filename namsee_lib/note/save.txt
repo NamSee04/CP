@@ -1,0 +1,40 @@
+// value at 3rd index in sorted array.
+    cout << "The value at 3rd index ::"
+         << *p.find_by_order(3) << endl;
+ 
+    // index of number 6
+    cout << "The index of number 6::" << p.order_of_key(6)
+
+g++ -DDebug test.cpp -o test
+//
+sort(all(a));
+a.resize(unique(all(a)) - a.begin());
+
+vector dp(n, vector(m, vector<int>(k)));
+
+in order_set, swap(tree_a, tree_b) is too slow, using tree_a.swap(tree_b) instead
+
+
+dynamic bitset
+
+template <size_t bitset_size>
+void solve(int n) {
+    bitset<bitset_size> base;
+    base[0] = 1;
+}
+ 
+sort(a.begin(), a.end(), [&](pii x, pii y) {
+    return x.f < y.f;
+});
+
+template <size_t bit = 0>
+void try_solve(int n) {
+    if constexpr (bit < 30) {
+        if (n < (1u << bit)) {
+            solve<(1u << bit)>(n);
+        } else {
+            try_solve<bit + 1>(n);
+        }
+    }
+}
+
