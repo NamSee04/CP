@@ -1,4 +1,9 @@
-#line 2 "DS/Sparse_table.hpp"
+#define rep(i, a, b) for(int i = a; i < (b); ++i)
+#define all(x) begin(x), end(x)
+#define sz(x) (int)(x).size()
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
 
 template<class T>
 struct sparsetable {
@@ -6,7 +11,7 @@ struct sparsetable {
 	sparsetable(const vector<T>& V) : jmp(1, V) {
 		for (int pw = 1, k = 1; pw * 2 <= V.size(); pw *= 2, ++k) {
 			jmp.emplace_back(V.size() - pw * 2 + 1);
-			rep(j,jmp[k].size())
+			rep(j,0,jmp[k].size())
 				jmp[k][j] = min(jmp[k - 1][j], jmp[k - 1][j + pw]);
 		}
 	}
